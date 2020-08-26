@@ -1,0 +1,59 @@
+
+    <p class="mt-2" style="font-size: 24px;">Listado de Clientes</p>
+    <div class="text-left">
+      <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-rounded btn-success float-right mb-4" type="button" [routerLink]="['/clientes/form']">
+        Crear Cliente
+      </button>
+    </div>
+
+
+
+    <div *ngIf="clientes?.length == 0" class="alert alert-info">
+      No hay registros en la base de datos
+    </div>
+    <table class="table table-bordered table-striped" *ngIf="clientes?.length>0">
+      <thead class="text-center">
+        <tr>
+          <th *ngIf="authService.hasRole('ROLE_USER')">#</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Email</th>
+          <th>Fecha</th>
+          <th *ngIf="authService.hasRole('ROLE_ADMIN')">Editar</th>
+          <th *ngIf="authService.hasRole('ROLE_ADMIN')">Eliminar</th>
+        </tr>
+      </thead>
+      <tbody class="text-center">
+        <tr *ngFor="let cliente of clientes">
+          <td *ngIf="authService.hasRole('ROLE_USER')">
+            <img class="img-thumbnail rounded" (click)="abrirModal(cliente)" [src]="cliente.foto | imagen"
+              style="width:64px; cursor: pointer;">
+
+
+          </td>
+          <td>{{cliente.nombre}}</td>
+          <td>{{cliente.apellido | uppercase }}</td>
+          <td>{{cliente.email}}</td>
+          <td>{{cliente.createAt | date:"EEEE dd, MMMM yyyy"}}</td>
+          <td *ngIf="authService.hasRole('ROLE_ADMIN')">
+            <button class="btn btn-primary" type="button" name="button" [routerLink]="['/clientes/form', cliente.id]">
+              <i class="fa fa-edit"></i></button>
+          </td>
+          <td *ngIf="authService.hasRole('ROLE_ADMIN')">
+            <button class="btn btn-danger" type="button" name="button" (click)="delete(cliente)">
+              <i class="fa fa-trash"></i></button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <app-paginator *ngIf="paginadorCli" [paginador]="paginadorCli"></app-paginator>
+
+
+<!-- asincrono 2 componentes ambos funcionan de forma asincrono
+el componente padre que anida, al hijo corre en un proceso en paralelo,
+al hijo por lo tanto cuando se inicializa la clase componente hijo (app-paginator) en el método onInit, es probable que el componente padre
+haya asignado el paginador al componente hijo  
+entonces tenemos que validar en el selector del hijo que el paginador exista(paginadorCli) que el padre ya lo haya asignado como atributo -->
+
+<!-- Componente modal -->
+<app-perfilcliente *ngIf="clienteSeleccionado" [cliente]="clienteSeleccionado"></app-perfilcliente>

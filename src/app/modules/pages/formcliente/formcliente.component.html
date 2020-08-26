@@ -1,0 +1,106 @@
+<ul *ngIf="errores?.length > 0" class="alert alert-danger">
+  <li *ngFor="let err of errores">
+    {{ err }}
+  </li>
+</ul>
+<div class="card mt-2">
+  <div class="card-header">{{titulo}}</div>
+  <div class="card-body">
+
+    <form autocomplete="off" [formGroup]="forma" (ngSubmit)="create()">
+
+      <div class="form-group row">
+        <label for="nombre" class="col-form-label col-sm-2">Nombre</label>
+        <div class="col-sm-6">
+
+          <input class="form-control" type="text" placeholder="Nombre" formControlName="nombre"
+            [class.is-invalid]="validarCampo('nombre')">
+          <small class="text-danger" *ngIf="validarCampo('nombre')">
+            Ingrese el nombre con al menos 4 caracteres
+          </small>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="" class="col-form-label col-sm-2">Apellido</label>
+        <div class="col-sm-6">
+          <input class="form-control" type="text" placeholder="Apellido" formControlName="apellido"
+            [class.is-invalid]="validarCampo('apellido')">
+          <small class="text-danger" *ngIf="validarCampo('apellido')">
+            El apellido es un campo requerido
+          </small>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="" class="col-form-label col-sm-2">Email</label>
+        <div class="col-sm-6">
+          <input class="form-control" type="text" placeholder="Email" formControlName="email"
+            [class.is-invalid]="validarCampo('email')">
+          <small class="text-danger" *ngIf="validarCampo('email')">
+            Ingrese un formato de correo válido ejemplo: tucorreo@correo.com
+          </small>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="" class="col-form-label col-sm-2">Fecha</label>
+        <div class="col-sm-6">
+          <input matInput [matDatepicker]="picker" class="form-control" formControlName="createAt" [class.is-invalid]="validarCampo('createAt')"
+          style="display:inline; width:90%">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+
+          <small class="text-danger" *ngIf="validarCampo('createAt')">
+            La fecha es requerida
+          </small>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="" class="col-form-label col-sm-2">Región</label>
+        <div class="col-sm-6">
+          <select class="form-control" formControlName="region" [class.is-invalid]="validarCampo('region')">
+          <option value="">---Selecionar una región---</option>
+          <option *ngFor="let region of regiones" [value]=region.id> {{region.nombre}} </option>
+          </select>
+
+          <small class="text-danger" *ngIf="validarCampo('region')">
+            La región es un campo requerido
+          </small>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-sm-6">
+          <button *ngIf="!cliente.id else elseBlock" class="btn btn-primary" type="submit" role="button"
+            [disabled]="forma.invalid">Crear cliente
+          </button>
+
+          <ng-template #elseBlock>
+            <button class="btn btn-primary" type="submit" role="button" (click)="update($event)"
+              [disabled]="forma.invalid">Editar Cliente</button>
+          </ng-template>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<hr>
+<!-- <pre>
+  Estado del formulario: {{ forma.valid }}
+  <br>
+  Status: {{ forma.status }}
+</pre> -->
+
+<pre>
+  {{ forma.value | json }}
+  {{ forma.value.region | json}}
+  {{ forma.value.region['nombre'] | json}}
+</pre>
+
+
+
+<!-- <input class="form-control" type="date" placeholder="Fecha" formControlName="createAt" [class.is-invalid]="validarCampo('createAt')"> -->

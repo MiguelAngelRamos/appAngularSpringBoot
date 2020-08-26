@@ -1,0 +1,11 @@
+.page-link {
+  color: #343A40;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+}
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    background-color: #343A40;
+    border-color: #434444;
+}

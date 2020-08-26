@@ -1,0 +1,1 @@
+export const URLAUTH = 'http://localhost:8080/oauth/token';
